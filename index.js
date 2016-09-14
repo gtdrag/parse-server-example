@@ -1,7 +1,6 @@
 // Example express application adding the parse-server module to expose Parse
 // compatible API routes.
 
-var S3Adapter = require('parse-server').S3Adapter;
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
@@ -27,12 +26,7 @@ var api = new ParseServer({
     }
   ]
 },
-filesAdapter: new S3Adapter(
-    "AKIAI5WKQDT6MQVHKRQQ",
-    "0wnFbO/BSnwda7FfTlF2OBnRMuWZsbuO2a26/+Kx",
-    "george-parse-files",
-    {directAccess: true}
-  ),
+
   liveQuery: {
     classNames: ["Posts", "Comments"] // List of classes to support for query subscriptions
   }
