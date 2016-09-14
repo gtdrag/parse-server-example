@@ -1,6 +1,7 @@
 // Example express application adding the parse-server module to expose Parse
 // compatible API routes.
 
+var S3Adapter = require('parse-server').S3Adapter;
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
