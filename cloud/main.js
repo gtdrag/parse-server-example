@@ -5,6 +5,6 @@ Parse.Cloud.define('hello', function(req, res) {
 
 
 Parse.Cloud.afterSave("HelloClass", function(request) {
-   alert("hello");
+   console.log('hello');
 });
 
