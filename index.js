@@ -28,7 +28,9 @@ var api = new ParseServer({
     }
   ]
 },
-
+appName : 'GarbageHoodie',
+  verifyUserEmails: false,
+  publicServerURL: 'https://garbage-hoodie.herokuapp.com/parse',
   liveQuery: {
     classNames: ["Posts", "Comments"] // List of classes to support for query subscriptions
   }
