@@ -12,17 +12,17 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
-  databaseURI: databaseUri || 'mongodb://parse:parse@ds029496.mlab.com:29496/bernie-app',
+  databaseURI: databaseUri || 'mongodb://georgethegarbageman:l1tter@ds121456.mlab.com:21456/heroku_mw1pw1hj',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-  appId: process.env.APP_ID || 'nNt9aMCyZCA35HQ29ZM7KftdpQI0QrtA6XXAuj4J',
-  masterKey: process.env.MASTER_KEY || 'RN87nJP1ldqZOqFVTp3umWTC5ivl9V7Ee3P3Li7S', //Add your master key here. Keep it secret!
-  serverURL: process.env.SERVER_URL || 'https://tranquil-mountain-95046.herokuapp.com/parse',  // Don't forget to change to https if needed
+  appId: process.env.APP_ID || 'garbage',
+  masterKey: process.env.MASTER_KEY || 'masterkey', //Add your master key here. Keep it secret!
+  serverURL: process.env.SERVER_URL || 'https://garbage-hoodie.herokuapp.com/parse',  // Don't forget to change to https if needed
   push: {
   ios: [
     {
-      pfx: 'Push.p12',
-      bundleId: 'com.superhead.berner',
-      production: true
+      pfx: '',
+      bundleId: '',
+      production: false
     }
   ]
 },
