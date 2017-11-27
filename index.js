@@ -16,14 +16,14 @@ if (!databaseUri) {
 var api = new ParseServer({
   databaseURI: databaseUri || 'mongodb://georgethegarbageman:l1tter@ds121456.mlab.com:21456/heroku_mw1pw1hj',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-  appId: process.env.APP_ID || 'nNt9aMCyZCA35HQ29ZM7KftdpQI0QrtA6XXAuj4J',
+  appId: process.env.APP_ID || 'garbage-hoodie',
   masterKey: process.env.MASTER_KEY || '8675309', //Add your master key here. Keep it secret!
-  serverURL: process.env.SERVER_URL || 'https://tranquil-mountain-95046.herokuapp.com/parse',  // Don't forget to change to https if needed
+  serverURL: process.env.SERVER_URL || 'https://garbage-hoodie.herokuapp.com/parse',  // Don't forget to change to https if needed
   push: {
   ios: [
     {
-      pfx: 'Push.p12',
-      bundleId: 'com.superhead.berner',
+      pfx: '',
+      bundleId: '',
       production: true
     }
   ]
@@ -40,12 +40,12 @@ var api = new ParseServer({
 var dashboard = new ParseDashboard({
   users: [{
     user: 'admin',
-    pass: 'H3ct0r08'
+    pass: 'admin'
   }],
   apps: [{
     serverURL: process.env.SERVER_URL + process.env.PARSE_MOUNT || '',
     appId: process.env.APP_ID || 'garbage-hoodie',
-    masterKey: process.env.MASTER_KEY || 'RN87nJP1ldqZOqFVTp3umWTC5ivl9V7Ee3P3Li7S',
+    masterKey: process.env.MASTER_KEY || '8675309',
     appName: process.env.APP_NAME || 'GarbageHoodie',
     iconName: 'icon-garbage.png'
   }],
@@ -54,12 +54,20 @@ var dashboard = new ParseDashboard({
 
 var app = express();
 
+app.use(function(req, res, next) {
+  req.headers['x-real-ip'] = req.ip;
+  next();
+});
+
 // Serve static assets from the /public folder
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, api);
+
+//start the dashboard
+app.use('/dashboard', dashboard);
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function(req, res) {
@@ -75,7 +83,7 @@ app.get('/test', function(req, res) {
 var port = process.env.PORT || 1337;
 var httpServer = require('http').createServer(app);
 httpServer.listen(port, function() {
-    console.log('parse-server-example running on port ' + port + '.');
+  console.log('parse-server-example running on port ' + port + '.');
 });
 
 // This will enable the Live Query real-time server
