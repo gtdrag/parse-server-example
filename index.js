@@ -3,39 +3,86 @@
 
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
+var ParseDashboard = require('parse-dashboard');
 var path = require('path');
+var allowInsecureHTTP = true;
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
+
 
 if (!databaseUri) {
   console.log('DATABASE_URI not specified, falling back to localhost.');
 }
 
 var api = new ParseServer({
-  databaseURI: databaseUri || 'mongodb://parse:parse@ds029496.mlab.com:29496/bernie-app',
+  databaseURI: databaseUri || '',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-  appId: process.env.APP_ID || 'nNt9aMCyZCA35HQ29ZM7KftdpQI0QrtA6XXAuj4J',
-  masterKey: process.env.MASTER_KEY || 'RN87nJP1ldqZOqFVTp3umWTC5ivl9V7Ee3P3Li7S', //Add your master key here. Keep it secret!
-  serverURL: process.env.SERVER_URL || 'https://tranquil-mountain-95046.herokuapp.com/parse',  // Don't forget to change to https if needed
-  push: {
-  ios: [
-    {
-      pfx: 'Push.p12',
-      bundleId: 'com.superhead.berner',
-      production: true
-    }
-  ]
-},
-
+  appId: process.env.APP_ID || 'garbage-hoodie',
+  masterKey: process.env.MASTER_KEY || 'myMasterKey', //Add your master key here. Keep it secret!
+  serverURL: process.env.SERVER_URL + process.env.PARSE_MOUNT || '', // Don't forget to change to https if needed
   liveQuery: {
     classNames: ["Posts", "Comments"] // List of classes to support for query subscriptions
+  },
+    appName : 'GarbageHoodie',
+  verifyUserEmails: true,
+  publicServerURL: 'https://garbage-hoodie.herokuapp.com/parse',
+  emailAdapter: {
+    module: 'parse-server-simple-mailgun-adapter',
+    options: {
+      fromAddress: process.env.EMAIL_FROM || "email-from@example.com",
+      domain: process.env.MAILGUN_DOMAIN || "example.com",
+      apiKey: process.env.MAILGUN_API_KEY || "API-Key",
+      // Verification email subject
+      verificationSubject: 'Please verify your e-mail for %appname%',
+      // Verification email body
+      verificationBody: 'Hi,\n\nYou are being asked to confirm the e-mail address %email% with %appname%\n\nClick here to confirm it:\n%link%',
+
+      // Password reset email subject
+      passwordResetSubject: 'Password Reset Request for %appname%',
+      // Password reset email body
+      passwordResetBody: 'Hi,\n\nYou requested a password reset for %appname%.\n\nClick here to reset it:\n%link%',
+      //OPTIONAL (will send HTML version of email):
+      passwordResetBodyHTML: "<!--DOCTYPE html>........"
+    }
+  },
+  push: {
+      android: {
+      senderId: '',
+      apiKey: ''
+    },
+    ios: {
+      pfx: '',
+      passphrase: '', // optional password to your p12/PFX
+      bundleId: '',
+      production: false
+    }
   }
 });
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
 
+var dashboard = new ParseDashboard({
+  users: [{
+    user: 'admin',
+    pass: 'admin'
+  }],
+  apps: [{
+    serverURL: process.env.SERVER_URL + process.env.PARSE_MOUNT || '',
+    appId: process.env.APP_ID || '',
+    masterKey: process.env.MASTER_KEY || '',
+    appName: process.env.APP_NAME || 'GarbageHoodie',
+    iconName: 'icon-garbage-hoodie.png'
+  }],
+  "iconsFolder": "appicons"
+}, allowInsecureHTTP);
+
 var app = express();
+
+app.use(function(req, res, next) {
+  req.headers['x-real-ip'] = req.ip;
+  next();
+});
 
 // Serve static assets from the /public folder
 app.use('/public', express.static(path.join(__dirname, '/public')));
@@ -43,6 +90,9 @@ app.use('/public', express.static(path.join(__dirname, '/public')));
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, api);
+
+//start the dashboard
+app.use('/dashboard', dashboard);
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function(req, res) {
@@ -58,7 +108,7 @@ app.get('/test', function(req, res) {
 var port = process.env.PORT || 1337;
 var httpServer = require('http').createServer(app);
 httpServer.listen(port, function() {
-    console.log('parse-server-example running on port ' + port + '.');
+  console.log('parse-server-example running on port ' + port + '.');
 });
 
 // This will enable the Live Query real-time server
