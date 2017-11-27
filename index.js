@@ -43,7 +43,7 @@ var dashboard = new ParseDashboard({
     pass: 'admin'
   }],
   apps: [{
-    serverURL: process.env.SERVER_URL + process.env.PARSE_MOUNT || '',
+    serverURL: process.env.SERVER_URL + process.env.PARSE_MOUNT || 'https://garbage-hoodie.herokuapp.com/parse',
     appId: process.env.APP_ID || 'garbage-hoodie',
     masterKey: process.env.MASTER_KEY || '8675309',
     appName: process.env.APP_NAME || 'GarbageHoodie',
