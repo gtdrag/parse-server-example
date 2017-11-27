@@ -15,7 +15,11 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
+<<<<<<< Updated upstream
   databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
+=======
+  databaseURI: databaseUri || 'mongodb://georgethegarbageman:l1tter@ds121456.mlab.com:21456/heroku_mw1pw1hj',
+>>>>>>> Stashed changes
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'garbage-hoodie',
   masterKey: process.env.MASTER_KEY || '8675309', //Add your master key here. Keep it secret!
