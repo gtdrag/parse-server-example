@@ -19,15 +19,7 @@ var api = new ParseServer({
   appId: process.env.APP_ID || 'garbage-hoodie',
   masterKey: process.env.MASTER_KEY || '8675309', //Add your master key here. Keep it secret!
   serverURL: process.env.SERVER_URL || 'https://garbage-hoodie.herokuapp.com/parse',  // Don't forget to change to https if needed
-  push: {
-  ios: [
-    {
-      pfx: '',
-      bundleId: '',
-      production: true
-    }
-  ]
-},
+  
 appName : 'GarbageHoodie',
   verifyUserEmails: false,
   publicServerURL: 'https://garbage-hoodie.herokuapp.com/parse',
