@@ -18,6 +18,10 @@ var api = new ParseServer({
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'garbage-hoodie',
   masterKey: process.env.MASTER_KEY || '8675309', //Add your master key here. Keep it secret!
+  restAPIKey: 'restAPIKey', 
+  dotNetKey: 'restAPIKey', 
+  clientKey: 'restAPIKey', 
+  javascriptKey: 'restAPIKey',
   serverURL: process.env.SERVER_URL || 'https://garbage-hoodie.herokuapp.com/parse',  // Don't forget to change to https if needed
   
 appName : 'GarbageHoodie',
